@@ -1,0 +1,25 @@
+{
+  "name": "weighted-fsm-js",
+  "version": "0.0.2",
+  "description": "Weighted Finite-State Machines library",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/georgjaehnig/weighted-fsm-js.git"
+  },
+  "keywords": [
+    "wfsm",
+    "fsm"
+  ],
+  "author": "Georg Jaehnig",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/georgjaehnig/weighted-fsm-js/issues"
+  },
+  "homepage": "https://github.com/georgjaehnig/weighted-fsm-js",
+  "dependencies": {},
+  "devDependencies": {}
+}
