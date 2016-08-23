@@ -1,8 +1,8 @@
 'use strict'
 
-var FSM = require('./src/index.js');
+var WFSM = require('./src/index.js');
 
-var fsm = FSM();
+var wfsm = WFSM();
 
-fsm.one();
+wfsm.one();
 
