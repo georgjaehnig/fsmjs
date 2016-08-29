@@ -1,8 +1,10 @@
 'use strict'
 
-var WFSM = require('./src/index.js');
+const WFSM = require('./src/index.js');
 
 var wfsm = WFSM();
 
-wfsm.one();
+wfsm.setI( 0 );
+wfsm.setF( 0, 0.5 );
 
+wfsm.print();

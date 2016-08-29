@@ -1,33 +1,9 @@
 module.exports = function wfsm () {
 
-	var symbols = ['a', 'b', 'c', 'd', 'e'];
-	const EPS = -1;
-	const EPS1 = -2;
-	const EPS2 = -3;
-	symbols[EPS] = '<eps>';
-	symbols[EPS1] = '<eps1>';
-	symbols[EPS2] = '<eps2>';
+  var	wfsm = {};
 
-
-	var tropicalSR = {
-		// a = abstract
-		aSum: function( w1, w2 ) {
-			if ( w1 == this.a0 ) return w2;
-			if ( w2 == this.a0 ) return w1;
-			return Math.min(w1, w2);
-		},
-		aProduct: function( w1, w2 ) {
-			if ( ( w1 == this.a0 ) || ( w2 == this.a0 ) ) return this.a0;
-			return w1 + w2;
-		},
-		a0: "+inf",
-		a1: 0,
-		aProductClosure: function ( w ) {
-			return this.a0;
-		}
-	}
-
-	var realSR = {
+	wfsm.semirings = {}
+	wfsm.semirings.real = {
 		// a = abstract
 		aSum: function( w1, w2 ) {
 			if ( w1 == "+inf" || w2 == "+inf" ) return "+inf";
@@ -57,10 +33,40 @@ module.exports = function wfsm () {
 			return Math.round( res * 10000 ) / 10000;
 			return 1 / w;
 		}
-	}
+	};
 
-	function FSM( )
-	{
+	wfsm.semirings.tropical = {
+		// a = abstract
+		aSum: function( w1, w2 ) {
+			if ( w1 == this.a0 ) return w2;
+			if ( w2 == this.a0 ) return w1;
+			return Math.min(w1, w2);
+		},
+		aProduct: function( w1, w2 ) {
+			if ( ( w1 == this.a0 ) || ( w2 == this.a0 ) ) return this.a0;
+			return w1 + w2;
+		},
+		a0: "+inf",
+		a1: 0,
+		aProductClosure: function ( w ) {
+			return this.a0;
+		}
+	};
+
+
+	wfsm.symbols = ['a', 'b', 'c', 'd', 'e'];
+
+	const EPS = -1;
+	const EPS1 = -2;
+	const EPS2 = -3;
+
+  var symbols = [];	
+	
+	symbols[EPS] = '<eps>';
+	symbols[EPS1] = '<eps1>';
+	symbols[EPS2] = '<eps2>';
+
+
 	/*
 	 * variable names:
 	 *
@@ -85,7 +91,7 @@ module.exports = function wfsm () {
 		var fsm = this;
 
 		var Q = [];
-		fsm.Q = Q;
+		wfsm.Q = Q;
 
 		const E = 0;	// transitions
 		const F = 1;	// final weight
@@ -105,14 +111,14 @@ module.exports = function wfsm () {
 	 * Q[1][F] = 0.8
 	 */
 
-		var sr = realSR;
+		var sr = wfsm.semirings.real;
 		
-		fsm.setSR = function( semiring )
+		wfsm.setSR = function( semiring )
 		{
 			sr = semiring;
 		}
 
-		fsm.isFSA = true;
+		wfsm.isFSA = true;
 
 		// general helpers  --------------------------------------------------------------------
 
@@ -230,43 +236,43 @@ module.exports = function wfsm () {
 		// calculates index for a new q
 		// as "cross-product" out of q1 and q2
 		// returns q
-		fsm.pairQ = function( q1, q2, q2Length )
+		wfsm.pairQ = function( q1, q2, q2Length )
 		{
 			var q = q1 * q2Length + parseInt( q2 );
-			fsm.setN( q, q1 + "," + q2 );
+			wfsm.setN( q, q1 + "," + q2 );
 			return q;
 		}
 
 		// gets name of q
 		// returns n
-		fsm.getN = function( q )
+		wfsm.getN = function( q )
 		{
-			fsm.ensureQ( q );
+			wfsm.ensureQ( q );
 			if ( Q[q][N] == undefined ) return q;
 			return Q[q][N];
 		}
 
 		// sets name of w with n
 		// returns void
-		fsm.setN = function( q, n )
+		wfsm.setN = function( q, n )
 		{
-			fsm.ensureQ( q );
+			wfsm.ensureQ( q );
 			Q[q][N] = n;
 		}
 
 		// checks if q exists
 		// if not: creates q
 		// returns void
-		fsm.ensureQ = function ( q )
+		wfsm.ensureQ = function ( q )
 		{
 			if (! Q[q] ) {
-				fsm.setQ( q );
+				wfsm.setQ( q );
 			}
 		}
 
 		// sets q
 		// returns void
-		fsm.setQ = function ( q )
+		wfsm.setQ = function ( q )
 		{
 			Q[q] = [];
 			Q[q][E] = {};
@@ -276,21 +282,21 @@ module.exports = function wfsm () {
 
 		// unsets q
 		// returns void
-		fsm.unsetQ = function ( q )
+		wfsm.unsetQ = function ( q )
 		{
 			Q[q] = undefined;
 		}
 
 		// checks if q is defined
 		// returns bool
-		fsm.isQ = function ( q )
+		wfsm.isQ = function ( q )
 		{
 			return ( Q[q] != undefined );
 		}
 
 		// deletes all undefined states in Q array
 		// returns void
-		fsm.shrink = function()
+		wfsm.shrink = function()
 		{
 			var count = 0;
 			var newIndices = {};
@@ -305,7 +311,7 @@ module.exports = function wfsm () {
 				if ( Q[q] == undefined ) {
 					Q.splice(q, 1);
 				} else {
-					fsm.adjustE( q, newIndices );
+					wfsm.adjustE( q, newIndices );
 					q++;
 				}
 			}
@@ -313,30 +319,30 @@ module.exports = function wfsm () {
 
 		// sets transition between p and q with a:b and weight w
 		// returns void
-		fsm.setE = function( p, q, a, b, w ) 
+		wfsm.setE = function( p, q, a, b, w ) 
 		{
 			if ( w == sr.a0 ) return; // 0 weight = no transition
 
 			if ( w == undefined ) w = sr.a1;	// weight trivially
 			if ( b == undefined ) b = a;
 
-			if ( a != b ) fsm.isFSA = false;
+			if ( a != b ) wfsm.isFSA = false;
 
-			fsm.ensureQ( p );
-			fsm.ensureQ( q );
+			wfsm.ensureQ( p );
+			wfsm.ensureQ( q );
 
 			if (! Q[p][E][q] ) Q[p][E][q] = {}; 
 			if (! Q[p][E][q][a] ) Q[p][E][q][a] = {}; 
 			
 			Q[p][E][q][a][b] = sr.aSum( 
-				fsm.getE( p, q, a, b ),
+				wfsm.getE( p, q, a, b ),
 				w
 			);
 		}
 
 		// checks if p has outgoing transition with a:b
 		// returns bool
-		fsm.hasE = function( p, a, b ) 
+		wfsm.hasE = function( p, a, b ) 
 		{
 			//if ( b == undefined ) b = a;
 			for ( var q in Q[p][E] ) { 
@@ -353,7 +359,7 @@ module.exports = function wfsm () {
 		
 		// checks if transition exists
 		// returns bool
-		fsm.isE = function( p, q, a, b ) 
+		wfsm.isE = function( p, q, a, b ) 
 		{
 			if ( b == undefined ) b = a;
 			return (
@@ -365,89 +371,89 @@ module.exports = function wfsm () {
 		
 		// deletes transition
 		// returns void
-		fsm.unsetE = function( p, q, a, b ) 
+		wfsm.unsetE = function( p, q, a, b ) 
 		{
 			if ( b == undefined ) b = a;
-			if (! fsm.isE( p, q, a, b ) ) return;
+			if (! wfsm.isE( p, q, a, b ) ) return;
 			delete Q[p][E][q][a][b];
 		}
 
 		// gets weight of transition
 		// returns w
-		fsm.getE = function( p, q, a, b ) 
+		wfsm.getE = function( p, q, a, b ) 
 		{
 			if ( b == undefined ) b = a;
-			if (! fsm.isE( p, q, a, b ) ) return sr.a0;
+			if (! wfsm.isE( p, q, a, b ) ) return sr.a0;
 			return Q[p][E][q][a][b];
 		}
 
 		// sets initial weight to w
 		// returns void
-		fsm.setI = function( q, w ) 
+		wfsm.setI = function( q, w ) 
 		{
 			if ( w == undefined ) w = sr.a1;
-			fsm.ensureQ( q );
+			wfsm.ensureQ( q );
 			Q[q][I] = w;
 		}
 
 		// sets initial weight to a0
 		// returns void
-		fsm.unsetI = function( q ) 
+		wfsm.unsetI = function( q ) 
 		{
-			fsm.ensureQ( q );
+			wfsm.ensureQ( q );
 			Q[q][I] = sr.a0;
 		}
 
 		// gets initial weight
 		// returns w
-		fsm.getI = function( q ) 
+		wfsm.getI = function( q ) 
 		{
-			fsm.ensureQ( q );
+			wfsm.ensureQ( q );
 			return Q[q][I];
 		}
 
 		// checks if q is an initial state
 		// returns bool
-		fsm.isI = function( q ) 
+		wfsm.isI = function( q ) 
 		{
 			return ( Q[q][I] != sr.a0 );
 		}
 
 		// sets final weight to w
 		// returns void
-		fsm.setF = function( q, w ) 
+		wfsm.setF = function( q, w ) 
 		{
 			if ( w == undefined ) w = sr.a1;
-			fsm.ensureQ( q );
+			wfsm.ensureQ( q );
 			Q[q][F] = w;
 		}
 
 		// sets final weight to a0
 		// returns void
-		fsm.unsetF = function( q ) 
+		wfsm.unsetF = function( q ) 
 		{
-			fsm.ensureQ( q );
+			wfsm.ensureQ( q );
 			Q[q][F] = sr.a0;
 		}
 
 		// gets final weight
 		// returns w
-		fsm.getF = function( q ) 
+		wfsm.getF = function( q ) 
 		{
-			fsm.ensureQ( q );
+			wfsm.ensureQ( q );
 			return Q[q][F];
 		}
 
 		// checks if q is a final state
 		// returns bool
-		fsm.isF = function( q ) 
+		wfsm.isF = function( q ) 
 		{
 			return ( Q[q][F] != sr.a0 );
 		}
 
 		// map all state indicies in Q[p][E] to new ones
 		// returns void
-		fsm.adjustE = function( p, newIndices )
+		wfsm.adjustE = function( p, newIndices )
 		{
 				var E2 = {};
 				for ( var q in Q[p][E] ) {
@@ -458,7 +464,7 @@ module.exports = function wfsm () {
 
 		// increase all state indicies in Q[p][E] by offset
 		// returns void
-		fsm.transposeE = function( p, offset )
+		wfsm.transposeE = function( p, offset )
 		{
 				var E2 = {};
 				for ( var q in Q[p][E] ) {
@@ -471,16 +477,16 @@ module.exports = function wfsm () {
 		// connect it with all other ones
 		// unset them
 		// returns void
-		fsm.swapI = function()
+		wfsm.swapI = function()
 		{
 			var q0 = Q.length;
-			fsm.setQ( q0 );
+			wfsm.setQ( q0 );
 			for ( var q in Q ) {
-				if (! fsm.isI( q ) ) continue;
-				fsm.setE( q0, q, EPS, EPS, fsm.getI( q ) );
-				fsm.unsetI( q );
+				if (! wfsm.isI( q ) ) continue;
+				wfsm.setE( q0, q, EPS, EPS, wfsm.getI( q ) );
+				wfsm.unsetI( q );
 			}
-			fsm.setI( q0 );
+			wfsm.setI( q0 );
 			return q0;
 		}
 
@@ -491,28 +497,28 @@ module.exports = function wfsm () {
 		// (extends fsm with fsm2)
 		// fsm2 is unusable afterwards
 		// returns void
-		fsm.union = function( fsm2 )	
+		wfsm.union = function( fsm2 )	
 		{
-			var q0 = fsm.swapI();
+			var q0 = wfsm.swapI();
 			Q = Q.concat( fsm2.Q );
 
 			for ( var q in Q ) {
 				// transpose former fsm2 E targets
 				if ( q <= q0 ) continue;
-				fsm.transposeE( q, q0 + 1 );
+				wfsm.transposeE( q, q0 + 1 );
 				// connect q0 with fsm2 initial states
-				if (! fsm.isI( q ) ) continue;
-				fsm.setE( q0, q, EPS, EPS, fsm.getI( q ) );
-				fsm.unsetI( q );
+				if (! wfsm.isI( q ) ) continue;
+				wfsm.setE( q0, q, EPS, EPS, wfsm.getI( q ) );
+				wfsm.unsetI( q );
 			}
-			fsm.isFSA = fsm.isFSA && fsm2.isFSA;
+			wfsm.isFSA = wfsm.isFSA && fsm2.isFSA;
 		}
 
 		// concats fsm with fsm2
 		// (connects every word in fsm with every word in fsm2)
 		// fsm2 is unusable afterwards
 		// returns void
-		fsm.concat = function( fsm2 )	// destroys fsm2
+		wfsm.concat = function( fsm2 )	// destroys fsm2
 		{
 			var fsm1Length = Q.length;
 			Q = Q.concat( fsm2.Q );
@@ -520,62 +526,62 @@ module.exports = function wfsm () {
 			var fsm2I = {}; 
 			for ( var q in Q ) {
 				if ( q < fsm1Length ) continue;
-				fsm.transposeE( q, fsm1Length );
+				wfsm.transposeE( q, fsm1Length );
 				// remember all fsm2 start states
-				if (! fsm.isI( q ) ) continue;
-				fsm2I[q] = fsm.getI( q );
+				if (! wfsm.isI( q ) ) continue;
+				fsm2I[q] = wfsm.getI( q );
 			}
 
 			// connect fsm1 final states with fsm2 start states
 			for ( var p in Q ) {
 				if ( p >= fsm1Length ) continue;
-				if (! fsm.isF( p ) ) continue;
+				if (! wfsm.isF( p ) ) continue;
 				for ( var q in fsm2I ) {
-					fsm.setE( 
+					wfsm.setE( 
 						p, q, EPS, EPS, 
 						sr.aProduct(
-							fsm.getF( p ),
+							wfsm.getF( p ),
 							fsm2I[q]
 						)
 					);
 				}
-				fsm.unsetF( p );
+				wfsm.unsetF( p );
 			}
 
 			// unset fsm2 start states
 			for ( var q in fsm2I ) {
-				fsm.unsetI( q );
+				wfsm.unsetI( q );
 			}
-			fsm.isFSA = fsm.isFSA && fsm2.isFSA;
+			wfsm.isFSA = wfsm.isFSA && fsm2.isFSA;
 		}
 
-		fsm.intersect = function( fsm1, fsm2 )
+		wfsm.intersect = function( fsm1, fsm2 )
 		{
 			if (! fsm1.isFSA ) throw "fsm1 must be a FSA.";
 			if (! fsm2.isFSA ) throw "fsm2 must be a FSA.";
 
-			fsm.composeDo( fsm1, fsm2 );
+			wfsm.composeDo( fsm1, fsm2 );
 		}
 
-		fsm.renameE = function( abOld, abNew )
+		wfsm.renameE = function( abOld, abNew )
 		{
-			for ( var p in fsm.Q ) {
-				for ( var q in fsm.Q[p][E] ) {
-					for ( var a in fsm.Q[p][E][q] ) {
-						for ( var b in fsm.Q[p][E][q][a] ) {
+			for ( var p in wfsm.Q ) {
+				for ( var q in wfsm.Q[p][E] ) {
+					for ( var a in wfsm.Q[p][E][q] ) {
+						for ( var b in wfsm.Q[p][E][q][a] ) {
 							if ( b != abOld ) continue;
-							fsm.Q[p][E][q][a][abNew] = fsm.Q[p][E][q][a][abOld]; 
-							delete fsm.Q[p][E][q][a][abOld]; 
+							wfsm.Q[p][E][q][a][abNew] = wfsm.Q[p][E][q][a][abOld]; 
+							delete wfsm.Q[p][E][q][a][abOld]; 
 						}
 						if ( a != abOld ) continue;
-						fsm.Q[p][E][q][abNew] = fsm.Q[p][E][q][abOld]; 
-						delete fsm.Q[p][E][q][abOld]; 
+						wfsm.Q[p][E][q][abNew] = wfsm.Q[p][E][q][abOld]; 
+						delete wfsm.Q[p][E][q][abOld]; 
 					}
 				}
 			}
 		}
 
-		fsm.compose = function( fsm1, fsm2 )
+		wfsm.compose = function( fsm1, fsm2 )
 		{
 			fsm1.renameE( EPS, EPS1 );
 			for (var  q in fsm1.Q ) { 
@@ -616,28 +622,28 @@ module.exports = function wfsm () {
 			//fsm1Filtered.trim();
 			//fsm1Filtered.print();
 
-			fsm.composeDo( fsm1Filtered, fsm2 );
-			//fsm.print();
-			fsm.connect();
-			fsm.trim();
-			fsm.renameE( EPS1, EPS );
-			fsm.renameE( EPS2, EPS );
+			wfsm.composeDo( fsm1Filtered, fsm2 );
+			//wfsm.print();
+			wfsm.connect();
+			wfsm.trim();
+			wfsm.renameE( EPS1, EPS );
+			wfsm.renameE( EPS2, EPS );
 		}
 
-		fsm.composeDo = function( fsm1, fsm2 )
+		wfsm.composeDo = function( fsm1, fsm2 )
 		{
 			for ( var p1 in fsm1.Q ) {
 				for ( var p2 in fsm2.Q ) {
-					var p = fsm.pairQ( p1, p2, fsm2.Q.length );
-					fsm.setI( p, sr.aProduct( fsm1.getI( p1 ), fsm2.getI( p2 ) ) );
-					fsm.setF( p, sr.aProduct( fsm1.getF( p1 ), fsm2.getF( p2 ) ) ); 
+					var p = wfsm.pairQ( p1, p2, fsm2.Q.length );
+					wfsm.setI( p, sr.aProduct( fsm1.getI( p1 ), fsm2.getI( p2 ) ) );
+					wfsm.setF( p, sr.aProduct( fsm1.getF( p1 ), fsm2.getF( p2 ) ) ); 
 					// epsilon transitions
 					for ( var q1 in fsm1.Q[p1][E] ) {
 						for ( var a1 in fsm1.Q[p1][E][q1] ) {
 							for ( var b1 in fsm1.Q[p1][E][q1][a1] ) {
 								if ( b1 != EPS ) continue;
-								var q = fsm.pairQ( q1, p2, fsm2.Q.length );
-								fsm.setE( 
+								var q = wfsm.pairQ( q1, p2, fsm2.Q.length );
+								wfsm.setE( 
 									p, q, a1, b1,
 									fsm1.getE( p1, q1, a1, b1 )
 								);
@@ -647,8 +653,8 @@ module.exports = function wfsm () {
 					for ( var q2 in fsm2.Q[p2][E] ) {
 						var a2 = EPS;
 						for ( var b2 in fsm2.Q[p2][E][q2][a2] ) {
-							var q = fsm.pairQ( p1, q2, fsm2.Q.length );
-							fsm.setE( 
+							var q = wfsm.pairQ( p1, q2, fsm2.Q.length );
+							wfsm.setE( 
 								p, q, a2, b2,
 								fsm2.getE( p2, q2, a2, b2 )
 							);
@@ -660,8 +666,8 @@ module.exports = function wfsm () {
 								for ( var b1a2 in fsm1.Q[p1][E][q1][a1] ) {
 									for ( var b2 in fsm2.Q[p2][E][q2][b1a2] ) {
 										//alert(p1 + " " + q1 + " " + p2 + " " + q2 + " " + a1 );
-										var q = fsm.pairQ( q1, q2, fsm2.Q.length );
-										fsm.setE( 
+										var q = wfsm.pairQ( q1, q2, fsm2.Q.length );
+										wfsm.setE( 
 											p, q, a1, b2,
 											sr.aProduct(
 												fsm1.getE( p1, q1, a1, b1a2 ),
@@ -678,32 +684,32 @@ module.exports = function wfsm () {
 		}
 		// unary operations  --------------------------------------------------------------------
 
-		fsm.plusClosure = function()
+		wfsm.plusClosure = function()
 		{
 			for ( var p in Q ) {
-				if (! fsm.isF( p ) ) continue;
+				if (! wfsm.isF( p ) ) continue;
 				for ( var q in Q ) {
-					if (! fsm.isI( q ) ) continue;
-					fsm.setE( 
+					if (! wfsm.isI( q ) ) continue;
+					wfsm.setE( 
 						p, q, EPS, EPS, 
 						sr.aProduct(
-							fsm.getF( p ),
-							fsm.getI( q )
+							wfsm.getF( p ),
+							wfsm.getI( q )
 						)
 					);
 				}
 			}
 		}
 
-		fsm.starClosure = function()
+		wfsm.starClosure = function()
 		{
-			fsm.plusClosure();
-			var q0 = fsm.swapI();
-			fsm.setF( q0 );
+			wfsm.plusClosure();
+			var q0 = wfsm.swapI();
+			wfsm.setF( q0 );
 		}
 
 		
-		fsm.singleSourceDistance = function( s )
+		wfsm.singleSourceDistance = function( s )
 		{
 			var d = [];
 			var r = [];
@@ -724,7 +730,7 @@ module.exports = function wfsm () {
 				for ( var q in Q[p][E] ) {
 					for ( var a in Q[p][E][q] ) {
 						for ( var b in Q[p][E][q][a] ) {
-							var w = fsm.getE( p, q, a, b );
+							var w = wfsm.getE( p, q, a, b );
 							//alert ( p + " " + w );
 							if ( d[q] == sr.aSum( d[q], sr.aProduct( rp, w ) ) ) continue;
 							d[q] = sr.aSum( d[q], sr.aProduct( rp, w ) )
@@ -743,7 +749,7 @@ module.exports = function wfsm () {
 		// calculates all-pairs-distance
 		// if symbols defined: only these symbols are considered
 		// returns distance matrix
-		fsm.allPairsDistance = function( symbols )
+		wfsm.allPairsDistance = function( symbols )
 		{
 			var d = [];
 			for ( var i in Q ) {
@@ -756,7 +762,7 @@ module.exports = function wfsm () {
 							if ( ( symbols != undefined ) && ( symbols.indexOf( parseInt( b ) ) == -1  ) ) continue;
 							d[i][j] = sr.aSum(
 								d[i][j],
-								fsm.getE( i, j, a, b )
+								wfsm.getE( i, j, a, b )
 							);
 						}
 					}
@@ -797,20 +803,20 @@ module.exports = function wfsm () {
 
 		// equivalence operations  --------------------------------------------------------------------
 
-		fsm.removeEpsilon = function()
+		wfsm.removeEpsilon = function()
 		{
-			var epsClosure = fsm.allPairsDistance( [EPS] );
+			var epsClosure = wfsm.allPairsDistance( [EPS] );
 			//alert( dump( epsClosure ) );
 			for ( var p in Q ) { 
 				for ( var q in epsClosure[p] ) {
 					if ( epsClosure[p][q] == sr.a0 ) continue;
-					fsm.setF(
+					wfsm.setF(
 						p,
 						sr.aSum(
-							( p != q ?  fsm.getF( p ) : sr.a0 ), // Mohri always uses here fsm.getF(p) 
+							( p != q ?  wfsm.getF( p ) : sr.a0 ), // Mohri always uses here wfsm.getF(p) 
 							sr.aProduct(
 								epsClosure[p][q],
-								fsm.getF( q )
+								wfsm.getF( q )
 							)
 						)
 					);
@@ -821,9 +827,9 @@ module.exports = function wfsm () {
 								if ( b == EPS ) continue;
 								// remember old weight and delete it
 								// so it won't get added to new one
-								var w = fsm.getE( q, r, a, b );
-								fsm.unsetE( p, r, a, b );
-								fsm.setE( 
+								var w = wfsm.getE( q, r, a, b );
+								wfsm.unsetE( p, r, a, b );
+								wfsm.setE( 
 									p, r, a, b, 
 									sr.aProduct( 
 										epsClosure[p][q], 
@@ -835,19 +841,19 @@ module.exports = function wfsm () {
 									"p: " + p + 
 									", target: " + q + 
 									", next: " + r + 
-									", E: " + fsm.getE( p, r, a, b ) +
-									", F(" + p + "): " + fsm.getF( p )
+									", E: " + wfsm.getE( p, r, a, b ) +
+									", F(" + p + "): " + wfsm.getF( p )
 								);
 	*/
 							}
 						}
 					}
-					fsm.unsetE( p, q, EPS, EPS );
+					wfsm.unsetE( p, q, EPS, EPS );
 				}
 			}
 		}
 
-		fsm.determinize = function()
+		wfsm.determinize = function()
 		{
 			var fsmD = new FSM();
 
@@ -855,8 +861,8 @@ module.exports = function wfsm () {
 			var q0 = 0;
 			var q0DS = [];
 			for ( var q in Q ) {
-				if (! fsm.isI( q ) ) continue;
-				q0DS.push( [ q, fsm.getI ( q ) ] );
+				if (! wfsm.isI( q ) ) continue;
+				q0DS.push( [ q, wfsm.getI ( q ) ] );
 			}
 			var queue = [ q0DS ];
 			fsmD.setI( q0 );
@@ -875,7 +881,7 @@ module.exports = function wfsm () {
 					for ( var q in Q[p][E] ) {
 						for ( var a in Q[p][E][q] ) {
 							// transition weight
-							var w = fsm.getE( p, q, a, a ); // temporary assuming a WFS_A_  
+							var w = wfsm.getE( p, q, a, a ); // temporary assuming a WFS_A_  
 							wD[a] = sr.aSum(
 								( wD[a] != undefined ? wD[a] : sr.a0 ),
 								sr.aProduct( v, w )
@@ -889,7 +895,7 @@ module.exports = function wfsm () {
 					for ( var q in Q[p][E] ) {
 						for ( var a in Q[p][E][q] ) {
 							// calculate subset structure of target state
-							w = fsm.getE( p, q, a, a ); // temporary assuming a WFS_A_ 
+							w = wfsm.getE( p, q, a, a ); // temporary assuming a WFS_A_ 
 							if ( qDS[a] == undefined ) qDS[a] = [];
 							qDS[a].push( 
 								[ 
@@ -919,7 +925,7 @@ module.exports = function wfsm () {
 								f,
 								sr.aProduct(
 									v,
-									fsm.getF( q )
+									wfsm.getF( q )
 								)
 							);
 						}
@@ -932,59 +938,59 @@ module.exports = function wfsm () {
 				}
 				pD++;
 			}
-			fsm.replace( fsmD );
+			wfsm.replace( fsmD );
 		}
 
 		// replaces fsm with fsmR
-		fsm.replace = function( fsmR ) 
+		wfsm.replace = function( fsmR ) 
 		{
 			// replace fsm with fsmD
-			for ( var q in fsm.Q ) {
-				delete fsm.Q[q];
+			for ( var q in wfsm.Q ) {
+				delete wfsm.Q[q];
 			}
 			for ( var q in fsmR.Q ) {
-				fsm.Q[q] = fsmR.Q[q];
+				wfsm.Q[q] = fsmR.Q[q];
 			}
 			fsm = fsmR;
 		}
 
-		fsm.pushWeights = function()
+		wfsm.pushWeights = function()
 		{
-			var d = fsm.allPairsDistance();
+			var d = wfsm.allPairsDistance();
 			var pot = [];
 			for ( var p in Q ) {
 				for ( var q in Q ) {
-					if (! fsm.isF( q ) ) continue;
+					if (! wfsm.isF( q ) ) continue;
 					pot[p] = sr.aSum(
 						( pot[p] != undefined ? pot[p] : sr.a0 ),
 						sr.aProduct(
 							d[p][q],
-							fsm.getF( q )
+							wfsm.getF( q )
 						)
 					);
 				}
 			}
 			for ( var p in Q ) {
-				fsm.setI( 
+				wfsm.setI( 
 					p,
 					sr.aProduct(
-						fsm.getI( p ),
+						wfsm.getI( p ),
 						pot[p]
 					)
 				);
-				fsm.setF( 
+				wfsm.setF( 
 					p, 
 					sr.aProduct(
 						sr.aInverse( pot[p] ),
-						fsm.getF( p )
+						wfsm.getF( p )
 					)
 				);
 				for ( var q in Q[p][E] ) {
 					for ( var a in Q[p][E][q] ) {
 						for ( var b in Q[p][E][q][a] ) {
-							var w = fsm.getE( p, q, a, b );
-							fsm.unsetE( p, q, a, b );
-							fsm.setE( 
+							var w = wfsm.getE( p, q, a, b );
+							wfsm.unsetE( p, q, a, b );
+							wfsm.setE( 
 								p, q, a, b, 
 								sr.aProduct(
 									sr.aInverse( pot[p] ),
@@ -1000,7 +1006,7 @@ module.exports = function wfsm () {
 			}
 		}
 
-		fsm.minimize = function()
+		wfsm.minimize = function()
 		{
 			// classical algorithm
 			// assumes deterministic, pushed and trimmed wfsa
@@ -1009,8 +1015,8 @@ module.exports = function wfsm () {
 				neq[p] = [];
 				for ( var q in Q ) {
 					neq[p][q] =
-						( fsm.isF( p ) && ! fsm.isF( q ) ) ||
-						(! fsm.isF( p ) && fsm.isF( q ) );
+						( wfsm.isF( p ) && ! wfsm.isF( q ) ) ||
+						(! wfsm.isF( p ) && wfsm.isF( q ) );
 				}
 			}
 
@@ -1044,25 +1050,25 @@ module.exports = function wfsm () {
 			// create new FSM
 			var fsmM = new FSM();
 			for ( var p in Q ) {
-				fsmM.setF( map[p], fsm.getF( p ) );
-				fsmM.setI( map[p], fsm.getI( p ) );
+				fsmM.setF( map[p], wfsm.getF( p ) );
+				fsmM.setI( map[p], wfsm.getI( p ) );
 				for ( var q in Q[p][E] ) {
 					for ( var a in Q[p][E][q] ) {
 						for ( var b in Q[p][E][q][a] ) {
-							var w = fsm.getE( p, q, a, b );
+							var w = wfsm.getE( p, q, a, b );
 							fsmM.setE( map[p], map[q], a, b, w );
 						}
 					}
 				}
 			}
-			fsm.replace( fsmM );
+			wfsm.replace( fsmM );
 		}
 
-		fsm.connect = function()
+		wfsm.connect = function()
 		{
 			var accessibleQ = {}; 
 			for ( var q in Q ) {
-				if (! fsm.isI( q ) ) continue;
+				if (! wfsm.isI( q ) ) continue;
 				accessibleQ[q] = true;
 			}
 
@@ -1082,20 +1088,20 @@ module.exports = function wfsm () {
 
 			for ( var q in Q ) {
 				if ( accessibleQ[q] ) continue;
-				fsm.unsetQ( q );
+				wfsm.unsetQ( q );
 			}
-			fsm.shrink();
+			wfsm.shrink();
 		}	
 		
-		fsm.trim = function()
+		wfsm.trim = function()
 		{
-			fsm.connect();
-			fsm.reverse();
-			fsm.connect();
-			fsm.reverse();
+			wfsm.connect();
+			wfsm.reverse();
+			wfsm.connect();
+			wfsm.reverse();
 		}
 
-		fsm.reverse = function()
+		wfsm.reverse = function()
 		{
 			// init help array
 			var QE = [];
@@ -1112,17 +1118,17 @@ module.exports = function wfsm () {
 			for ( var q in QE ) {
 				Q[q][E] = QE[q];
 				// swap initial and final weight
-				var w = fsm.getI( q );
-				fsm.setI( q, fsm.getF( q ) );
-				fsm.setF( q, w );
+				var w = wfsm.getI( q );
+				wfsm.setI( q, wfsm.getF( q ) );
+				wfsm.setF( q, w );
 			}
 		}
 
-		fsm.print = function()
+		wfsm.print = function()
 		{
 			var code = "digraph {\n" ;	
 			for ( var p in Q ) {
-				if (! fsm.isQ( p ) ) continue;
+				if (! wfsm.isQ( p ) ) continue;
 				for ( var q in Q[p][E] ) {
 					for ( var a in Q[p][E][q] ) {
 						for ( var b in Q[p][E][q][a] ) {
@@ -1133,43 +1139,40 @@ module.exports = function wfsm () {
 								" [ label=\"" + 
 								symbols[a] + 
 								( a != b ?  ":" + symbols[b] : "" ) +
-								( fsm.getE( p, q, a, b ) != sr.a1 ? "/" + fsm.getE( p, q, a, b ) : "" ) + 
+								( wfsm.getE( p, q, a, b ) != sr.a1 ? "/" + wfsm.getE( p, q, a, b ) : "" ) + 
 								"\" ] \n" ;
 						}
 					}
 				}
 			}
 			for ( var q in Q ) {
-				if (! fsm.isQ( q ) ) continue;
+				if (! wfsm.isQ( q ) ) continue;
 				code +=
 					q + 
 					" [ " +
 					"label=\"" +
-						fsm.getN( q ) +
+						wfsm.getN( q ) +
 						// print weights only if not a0 or a1
-						( ( fsm.isI( q ) && fsm.getI( q ) != sr.a1 ) ? "\\nI=" + fsm.getI( q ) : "" ) + 
-						( ( fsm.isF( q ) && fsm.getF( q ) != sr.a1 ) ? "\\nF=" + fsm.getF( q ) : "" ) + 
+						( ( wfsm.isI( q ) && wfsm.getI( q ) != sr.a1 ) ? "\\nI=" + wfsm.getI( q ) : "" ) + 
+						( ( wfsm.isF( q ) && wfsm.getF( q ) != sr.a1 ) ? "\\nF=" + wfsm.getF( q ) : "" ) + 
 						"\" " + 
 					"shape=\"" +
-						( fsm.isF( q ) ? "doublecircle" : "circle" ) +
+						( wfsm.isF( q ) ? "doublecircle" : "circle" ) +
 						"\" " +
-					( fsm.isI( q ) ? "style=\"bold\"" : "" ) +
+					( wfsm.isI( q ) ? "style=\"bold\"" : "" ) +
 					"]\n";
 			}
 			code += "rankdir=LR\n" ;	
 			code += "}" ;	
 
-			document.write( '<textarea cols="40" rows="5">' + code + "</textarea>" );	
-			document.write( "<img src='render_gif.php?code=" + code + "'>" );	
-			document.write( '<hr>' );	
+			console.log(code);	
 		}
 
-	}
 
-	return {
-		one: function () {
-			console.log('one');
-		}	
+	wfsm.one = function () {
+		console.log('one');
 	};
+
+	return wfsm;
 }
 
