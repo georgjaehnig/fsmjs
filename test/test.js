@@ -184,7 +184,9 @@ it('determinize', function() {
 	wfsm.setI( 0 );
 	wfsm.setF( 3 );
 	
+	fs.writeFile("determinize-1-before.dot", wfsm.toDot(), function(err) {} );
 	wfsm.determinize();
+	fs.writeFile("determinize-2-after.dot", wfsm.toDot(), function(err) {} );
 
 	assert.equal(JSON.stringify(wfsm.Q), '[[{"1":{"0":{"0":1}}},0,1],[{"1":{"1":{"1":0.4}},"2":{"2":{"2":0.18},"3":{"3":0.42}}},0,0,"1,0.3 / 2,0.7"],[{},1,0,"3,1"],null]'); 
 
@@ -201,7 +203,10 @@ it('minimize', function() {
 	wfsm.setI( 0 );
 	wfsm.setF( 2 );
 	wfsm.setF( 4 );
+
+	fs.writeFile("minimize-1-before.dot", wfsm.toDot(), function(err) {} );
 	wfsm.minimize();
+	fs.writeFile("minimize-2-after.dot", wfsm.toDot(), function(err) {} );
 
 	assert.equal(JSON.stringify(wfsm.Q), '[[{"1":{"0":{"0":2}}},0,1],[{"2":{"1":{"1":2}}},0,0],[{},1,0],null,null]'); 
 
