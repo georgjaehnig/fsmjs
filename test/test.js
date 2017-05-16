@@ -1,6 +1,6 @@
 'use strict'
 
-const WFSM = require('./src/index.js');
+const WFSM = require('../src/index.js');
 
 var wfsm = WFSM();
 
