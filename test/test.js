@@ -1,13 +1,13 @@
 'use strict'
 
-const FSM = require('../src/index.js');
+const WFSM = require('../src/index.js');
 var assert = require('assert');
 
 var fs = require('fs');
 
 it('removeEpsilon', function() {
 
-	var wfsm = new FSM();
+	var wfsm = new WFSM();
 	wfsm.setE( 0, 1, 0, 0, 0.25 );
 	wfsm.setE( 0, 1, wfsm.EPS, wfsm.EPS, 0.5 );
 	wfsm.setE( 1, 1, wfsm.EPS, wfsm.EPS, 0.2 );
@@ -29,14 +29,14 @@ it('removeEpsilon', function() {
 
 it('union', function() {
 
-	var fsm1 = new FSM();
+	var fsm1 = new WFSM();
 	fsm1.setE( 0, 1, 0 );
 	fsm1.setE( 0, 2, 1 );
 	fsm1.setI( 0, 0.4 );
 	fsm1.setF( 1 );
 	fsm1.setF( 2 );
 
-	var fsm2 = new FSM();
+	var fsm2 = new WFSM();
 	fsm2.setE( 0, 1, 2 );
 	fsm2.setI( 0, 0.6 );
 	fsm2.setF( 1 );
@@ -50,14 +50,14 @@ it('union', function() {
 
 it('concat', function() {
 
-	var fsm1 = new FSM();
+	var fsm1 = new WFSM();
 	fsm1.setE( 0, 1, 0 );
 	fsm1.setE( 0, 2, 1 );
 	fsm1.setI( 0 );
 	fsm1.setF( 1 );
 	fsm1.setF( 2, 0.8 );
 
-	var fsm2 = new FSM();
+	var fsm2 = new WFSM();
 	fsm2.setE( 0, 1, 2 );
 	fsm2.setI( 0, 0.5 );
 	fsm2.setF( 1 );
@@ -71,19 +71,19 @@ it('concat', function() {
 
 it('intersect', function() {
 
-	var fsm1 = new FSM();
+	var fsm1 = new WFSM();
 	fsm1.setE( 0, 1, 0 );
 	fsm1.setE( 0, 2, 1, 1, 0.5 );
 	fsm1.setI( 0 );
 	fsm1.setF( 1 );
 	fsm1.setF( 2, 0.8 );
 
-	var fsm2 = new FSM();
+	var fsm2 = new WFSM();
 	fsm2.setE( 0, 1, 1, 1, 0.6 );
 	fsm2.setI( 0, 0.5 );
 	fsm2.setF( 1, 0.5 );
 
-	var fsm3 = new FSM();
+	var fsm3 = new WFSM();
 	fsm3.intersect( fsm1, fsm2 );
 
 	fsm3.connect();
@@ -95,7 +95,7 @@ it('intersect', function() {
 
 it('closureTropical', function() {
 
-	var fsm = new FSM();
+	var fsm = new WFSM();
 	fsm.setSR( fsm.semirings.tropical );
 
 	fsm.setI( 3 );
@@ -117,7 +117,7 @@ it('closureTropical', function() {
 
 it('pushWeights', function() {
 
-	var fsm = new FSM();
+	var fsm = new WFSM();
 	fsm.setI( 0 );
 	fsm.setE( 0, 1, 0, 0, 2 );
 	fsm.setE( 1, 15, 1, 1, 1 );
@@ -154,7 +154,7 @@ it('pushWeights', function() {
 
 it('determinize', function() {
 
-	var fsm = new FSM();
+	var fsm = new WFSM();
 	fsm.setE( 0, 1, 0, 0, 0.3 );
 	fsm.setE( 1, 1, 1, 1, 0.4 );
 	fsm.setE( 1, 3, 2, 2, 0.6 );
@@ -173,7 +173,7 @@ it('determinize', function() {
 
 it('minimize', function() {
 
-	var fsm = new FSM();
+	var fsm = new WFSM();
 	fsm.setE( 0, 1, 0, 0 );
 	fsm.setE( 1, 2, 1, 1 );
 	fsm.setE( 0, 3, 0, 0 );
