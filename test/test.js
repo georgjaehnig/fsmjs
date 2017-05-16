@@ -17,11 +17,11 @@ it('removeEpsilon', function() {
 	wfsm.setF( 1, 0.3 );
 	wfsm.setF( 0, 0.25 );
 
-	fs.writeFile("removeEpsilon-1-before.dot", wfsm.toDot());
+	fs.writeFile("removeEpsilon-1-before.dot", wfsm.toDot(), function(err) {} );
 
 	wfsm.removeEpsilon();
 
-	fs.writeFile("removeEpsilon-2-after.dot", wfsm.toDot());
+	fs.writeFile("removeEpsilon-2-after.dot", wfsm.toDot(), function(err) {} );
 
 	assert.equal(JSON.stringify(wfsm.Q), '[[{"0":{"1":{"1":0.3125}},"1":{"0":{"0":0.25},"-1":{}}},0.4375,0],[{"0":{"1":{"1":0.625}},"1":{"-1":{}}},0.375,1]]');
 });
@@ -41,7 +41,12 @@ it('union', function() {
 	wfsm2.setI( 0, 0.6 );
 	wfsm2.setF( 1 );
 
+	fs.writeFile("union-1.dot", wfsm1.toDot(), function(err) {} );
+	fs.writeFile("union-2.dot", wfsm2.toDot(), function(err) {} );
+
 	wfsm1.union( wfsm2 );
+
+	fs.writeFile("union-3-both.dot", wfsm1.toDot(), function(err) {} );
 
 	assert.equal(JSON.stringify(wfsm1.Q), '[[{"1":{"0":{"0":1}},"2":{"1":{"1":1}}},0,0],[{},1,0],[{},1,0],[{"0":{"-1":{"-1":0.4}},"4":{"-1":{"-1":0.6}}},0,1]]'); 
 
@@ -62,7 +67,12 @@ it('concat', function() {
 	wfsm2.setI( 0, 0.5 );
 	wfsm2.setF( 1 );
 
+	fs.writeFile("concat-1.dot", wfsm1.toDot(), function(err) {} );
+	fs.writeFile("concat-2.dot", wfsm2.toDot(), function(err) {} );
+
 	wfsm1.concat( wfsm2 );
+
+	fs.writeFile("concat-3-both.dot", wfsm1.toDot(), function(err) {});
 
 	assert.equal(JSON.stringify(wfsm1.Q), '[[{"1":{"0":{"0":1}},"2":{"1":{"1":1}}},0,1],[{"3":{"-1":{"-1":0.5}}},0,0],[{"3":{"-1":{"-1":0.4}}},0,0]]'); 
 
@@ -88,6 +98,10 @@ it('intersect', function() {
 
 	wfsm3.connect();
 
+	fs.writeFile("intersect-1.dot", wfsm1.toDot(), function(err) {} );
+	fs.writeFile("intersect-2.dot", wfsm2.toDot(), function(err) {} );
+	fs.writeFile("intersect-3-intersected.dot", wfsm3.toDot(), function(err) {});
+
 	assert.equal(JSON.stringify(wfsm3.Q), '[[{"1":{"1":{"1":0.3}}},0,0.5,"0,0"],[{},0.4,0,"2,1"]]'); 
 
 });
@@ -108,7 +122,9 @@ it('closureTropical', function() {
 	wfsm.setF( 0, 2 );
 	wfsm.setF( 2, 1 );
 
+	fs.writeFile("closureTropical-1-before.dot", wfsm.toDot(), function(err) {} );
 	wfsm.starClosure();
+	fs.writeFile("closureTropical-2-after.dot", wfsm.toDot(), function(err) {} );
 
 	assert.equal(JSON.stringify(wfsm.Q), '[[{"3":{"-1":{"-1":2}}},2,"+inf"],[{"2":{"1":{"1":0}}},"+inf","+inf"],[{"1":{"2":{"2":1}},"3":{"-1":{"-1":1}}},1,"+inf"],[{"0":{"0":{"0":0}},"1":{"2":{"2":0}}},"+inf","+inf"],[{"3":{"-1":{"-1":0}}},0,0]]'); 
 
