@@ -24,7 +24,7 @@ exampleSingleSourceDistance();
 function exampleRemoveEpsilon2()
 {
 	document.write( "<h3> Remove Epsilon 2</h3>");
-	fsm = new FSM();
+	var fsm = new FSM();
 
 	fsm.setE( 0, 0, EPS, EPS, 0.2 );
 
@@ -39,7 +39,7 @@ function exampleRemoveEpsilon2()
 function exampleRemoveEpsilon()
 {
 	document.write( "<h3> Remove Epsilon </h3>");
-	fsm = new FSM();
+	var fsm = new FSM();
 
 	fsm.setE( 0, 1, 0, 0, 0.25 );
 	fsm.setE( 0, 1, EPS, EPS, 0.5 );
@@ -58,7 +58,7 @@ function exampleRemoveEpsilon()
 function exampleClosure()
 {
 	document.write( "<h3> Star Closure </h3>");
-	fsm = new FSM();
+	var fsm = new FSM();
 
 	fsm.setI( 0 );
 	fsm.setF( 0, 0.5 );
@@ -71,7 +71,7 @@ function exampleClosure()
 function exampleClosureTropical()
 {
 	document.write( "<h3> Star Closure in Tropical SR</h3>");
-	fsm = new FSM();
+	var fsm = new FSM();
 	fsm.setSR( tropicalSR );
 
 	fsm.setI( 3 );
@@ -94,7 +94,7 @@ function exampleClosureTropical()
 function exampleUnion()
 {
 	document.write( "<h3> Union </h3>");
-	fsm1 = new FSM();
+	var fsm1 = new FSM();
 	fsm1.setE( 0, 1, 0 );
 	fsm1.setE( 0, 2, 1 );
 	fsm1.setI( 0 );
@@ -103,7 +103,7 @@ function exampleUnion()
 
 	fsm1.print();
 
-	fsm2 = new FSM();
+	var fsm2 = new FSM();
 	fsm2.setE( 0, 1, 2 );
 	fsm2.setI( 0 );
 	fsm2.setF( 1 );
@@ -117,7 +117,7 @@ function exampleUnion()
 function exampleConcat()
 {
 	document.write( "<h3> Concat </h3>");
-	fsm1 = new FSM();
+	var fsm1 = new FSM();
 	fsm1.setE( 0, 1, 0 );
 	fsm1.setE( 0, 2, 1 );
 	fsm1.setI( 0 );
@@ -126,7 +126,7 @@ function exampleConcat()
 
 	fsm1.print();
 
-	fsm2 = new FSM();
+	var fsm2 = new FSM();
 	fsm2.setE( 0, 1, 2 );
 	fsm2.setI( 0, 0.5 );
 	fsm2.setF( 1 );
@@ -140,7 +140,7 @@ function exampleConcat()
 function exampleIntersect()
 {
 	document.write( "<h3> Intersect </h3>");
-	fsm1 = new FSM();
+	var fsm1 = new FSM();
 	fsm1.setE( 0, 1, 0 );
 	fsm1.setE( 0, 2, 1, 1, 0.5 );
 	fsm1.setI( 0 );
@@ -149,14 +149,14 @@ function exampleIntersect()
 
 	fsm1.print();
 
-	fsm2 = new FSM();
+	var fsm2 = new FSM();
 	fsm2.setE( 0, 1, 1, 1, 0.6 );
 	fsm2.setI( 0, 0.5 );
 	fsm2.setF( 1, 0.5 );
 
 	fsm2.print();
 
-	fsm3 = new FSM();
+	var fsm3 = new FSM();
 	fsm3.intersect( fsm1, fsm2 );
 	fsm3.print();
 	fsm3.trim();
@@ -167,7 +167,7 @@ function exampleIntersect()
 function exampleIntersectEpsilon()
 {
 	document.write( "<h3> Intersect with Epsilon</h3>");
-	fsm1 = new FSM();
+	var fsm1 = new FSM();
 	fsm1.setE( 0, 1, 0 );
 	fsm1.setE( 1, 2, EPS, EPS, 0.8 );
 	fsm1.setI( 0 );
@@ -175,7 +175,7 @@ function exampleIntersectEpsilon()
 
 	fsm1.print();
 
-	fsm2 = new FSM();
+	var fsm2 = new FSM();
 	fsm2.setE( 0, 1, EPS, EPS, 0.8 );
 	fsm2.setE( 1, 2, 0 );
 	fsm2.setI( 0 );
@@ -183,7 +183,7 @@ function exampleIntersectEpsilon()
 
 	fsm2.print();
 
-	fsm3 = new FSM();
+	var fsm3 = new FSM();
 	fsm3.intersect( fsm1, fsm2 );
 	fsm3.print();
 	fsm3.connect();
@@ -193,7 +193,7 @@ function exampleIntersectEpsilon()
 function exampleCompose()
 {
 	document.write( "<h3> Compose </h3>");
-	fsm1 = new FSM();
+	var fsm1 = new FSM();
 	fsm1.setE( 0, 1, 0, 0 );
 	fsm1.setE( 1, 2, 1, EPS );
 	fsm1.setE( 2, 3, 2, EPS );
@@ -203,7 +203,7 @@ function exampleCompose()
 
 	fsm1.print();
 
-	fsm2 = new FSM();
+	var fsm2 = new FSM();
 	fsm2.setE( 0, 1, 0, 3 );
 	fsm2.setE( 1, 2, EPS, 4 );
 	fsm2.setE( 2, 3, 3, 0 );
@@ -212,7 +212,7 @@ function exampleCompose()
 
 	fsm2.print();
 
-	fsm3 = new FSM();
+	var fsm3 = new FSM();
 	fsm3.compose( fsm1, fsm2 );
 	fsm3.print();
 }
@@ -220,7 +220,7 @@ function exampleCompose()
 function exampleReverse()
 {
 	document.write( "<h3> Reverse </h3>");
-	fsm = new FSM();
+	var fsm = new FSM();
 	fsm.setE( 0, 1, 0 );
 	fsm.setE( 1, 2, 1 );
 	fsm.setI( 0, 0.5 );
@@ -233,7 +233,7 @@ function exampleReverse()
 function examplePushWeights()
 {
 	document.write( "<h3> Push Weights </h3>");
-	fsm = new FSM();
+	var fsm = new FSM();
 	fsm.setI( 0 );
 	fsm.setE( 0, 1, 0, 0, 2 );
 	fsm.setE( 1, 15, 1, 1, 1 );
@@ -272,7 +272,7 @@ function examplePushWeights()
 function exampleDeterminize()
 {
 	document.write( "<h3> Determinize </h3>");
-	fsm = new FSM();
+	var fsm = new FSM();
 	fsm.setE( 0, 1, 0, 0, 0.3 );
 	fsm.setE( 1, 1, 1, 1, 0.4 );
 	fsm.setE( 1, 3, 2, 2, 0.6 );
@@ -290,7 +290,7 @@ function exampleDeterminize()
 function exampleMinimize()
 {
 	document.write( "<h3> Minimize </h3>");
-	fsm = new FSM;
+	var fsm = new FSM;
 	fsm.setE( 0, 1, 0, 0 );
 	fsm.setE( 1, 2, 1, 1 );
 	fsm.setE( 0, 3, 0, 0 );
@@ -306,7 +306,7 @@ function exampleMinimize()
 function exampleSingleSourceDistance()
 {
 	document.write( "<h3> Single Source Distance </h3>");
-	fsm = new FSM;
+	var fsm = new FSM;
 	fsm.setE( 0, 1, 0, 0, 0.5 );
 	fsm.setE( 1, 3, 0, 0, 0.1 );
 	fsm.setE( 0, 1, 1, 1, 0.4 );
@@ -325,7 +325,7 @@ function runTests()
 
 	removeEpsilon: function () { // RemoveEpsilon
 
-	fsm = new FSM();
+	var fsm = new FSM();
 
 	fsm.setE( 0, 1, 0, 0, 0.25 );
 	fsm.setE( 0, 1, EPS, EPS, 0.5 );
@@ -343,14 +343,14 @@ function runTests()
 
 	union: function () { 
 
-	fsm1 = new FSM();
+	var fsm1 = new FSM();
 	fsm1.setE( 0, 1, 0 );
 	fsm1.setE( 0, 2, 1 );
 	fsm1.setI( 0, 0.4 );
 	fsm1.setF( 1 );
 	fsm1.setF( 2 );
 
-	fsm2 = new FSM();
+	var fsm2 = new FSM();
 	fsm2.setE( 0, 1, 2 );
 	fsm2.setI( 0, 0.6 );
 	fsm2.setF( 1 );
@@ -362,14 +362,14 @@ function runTests()
 
 	concat: function () { 
 
-	fsm1 = new FSM();
+	var fsm1 = new FSM();
 	fsm1.setE( 0, 1, 0 );
 	fsm1.setE( 0, 2, 1 );
 	fsm1.setI( 0 );
 	fsm1.setF( 1 );
 	fsm1.setF( 2, 0.8 );
 
-	fsm2 = new FSM();
+	var fsm2 = new FSM();
 	fsm2.setE( 0, 1, 2 );
 	fsm2.setI( 0, 0.5 );
 	fsm2.setF( 1 );
@@ -382,19 +382,19 @@ function runTests()
 
 	intersect: function () { 
 
-	fsm1 = new FSM();
+	var fsm1 = new FSM();
 	fsm1.setE( 0, 1, 0 );
 	fsm1.setE( 0, 2, 1, 1, 0.5 );
 	fsm1.setI( 0 );
 	fsm1.setF( 1 );
 	fsm1.setF( 2, 0.8 );
 
-	fsm2 = new FSM();
+	var fsm2 = new FSM();
 	fsm2.setE( 0, 1, 1, 1, 0.6 );
 	fsm2.setI( 0, 0.5 );
 	fsm2.setF( 1, 0.5 );
 
-	fsm3 = new FSM();
+	var fsm3 = new FSM();
 	fsm3.intersect( fsm1, fsm2 );
 	//return ( serialize( fsm3 ) == 'a:2:{s:1:"Q";a:6:{i:0;a:4:{i:0;a:1:{i:5;a:1:{i:1;a:1:{i:1;d:0.3;}}}i:1;i:0;i:2;d:0.5;i:3;s:3:"0,0";}i:1;a:4:{i:0;a:0:{}i:1;i:0;i:2;i:0;i:3;s:3:"0,1";}i:2;a:4:{i:0;a:0:{}i:1;i:0;i:2;i:0;i:3;s:3:"1,0";}i:3;a:4:{i:0;a:0:{}i:1;d:0.5;i:2;i:0;i:3;s:3:"1,1";}i:4;a:4:{i:0;a:0:{}i:1;i:0;i:2;i:0;i:3;s:3:"2,0";}i:5;a:4:{i:0;a:0:{}i:1;d:0.4;i:2;i:0;i:3;s:3:"2,1";}}s:5:"isFSA";b:1;}' );
 
@@ -407,7 +407,7 @@ function runTests()
 
 	closureTropical:  function () { 
 
-	fsm = new FSM();
+	var fsm = new FSM();
 	fsm.setSR( tropicalSR );
 
 	fsm.setI( 3 );
@@ -428,7 +428,7 @@ function runTests()
 
 	pushWeights:  function () { 
 
-	fsm = new FSM();
+	var fsm = new FSM();
 	fsm.setI( 0 );
 	fsm.setE( 0, 1, 0, 0, 2 );
 	fsm.setE( 1, 15, 1, 1, 1 );
@@ -465,7 +465,7 @@ function runTests()
 
 	determinize:  function () { 
 
-	fsm = new FSM();
+	var fsm = new FSM();
 	fsm.setE( 0, 1, 0, 0, 0.3 );
 	fsm.setE( 1, 1, 1, 1, 0.4 );
 	fsm.setE( 1, 3, 2, 2, 0.6 );
@@ -483,7 +483,7 @@ function runTests()
 
 	minimize: function() {
 
-	fsm = new FSM;
+	var fsm = new FSM;
 	fsm.setE( 0, 1, 0, 0 );
 	fsm.setE( 1, 2, 1, 1 );
 	fsm.setE( 0, 3, 0, 0 );
