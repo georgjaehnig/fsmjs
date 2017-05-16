@@ -60,9 +60,9 @@ module.exports = function WFSM() {
 
 	wfsm.symbols = ['a', 'b', 'c', 'd', 'e'];
 
-	wfsm.symbols[wfsm.EPS] = '<eps>';
-	wfsm.symbols[wfsm.EPS1] = '<eps1>';
-	wfsm.symbols[wfsm.EPS2] = '<eps2>';
+	wfsm.symbols[wfsm.EPS] = 'ε';
+	wfsm.symbols[wfsm.EPS1] = 'ε₁';
+	wfsm.symbols[wfsm.EPS2] = 'ε₂';
 
 
 	/*
