@@ -1,4 +1,4 @@
-module.exports = function wfsm () {
+module.exports = function WFSM() {
 
   var	wfsm = {};
 
@@ -853,7 +853,7 @@ module.exports = function wfsm () {
 
 		wfsm.determinize = function()
 		{
-			var fsmD = new FSM();
+			var fsmD = new WFSM();
 
 			// init new start state (only 1)
 			var q0 = 0;
@@ -1046,7 +1046,7 @@ module.exports = function wfsm () {
 			}
 
 			// create new FSM
-			var fsmM = new FSM();
+			var fsmM = new WFSM();
 			for ( var p in Q ) {
 				fsmM.setF( map[p], wfsm.getF( p ) );
 				fsmM.setI( map[p], wfsm.getI( p ) );
