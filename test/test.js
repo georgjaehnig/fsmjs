@@ -60,3 +60,27 @@ it('concat', function() {
 	assert.equal(JSON.stringify(fsm1.Q), '[[{"1":{"0":{"0":1}},"2":{"1":{"1":1}}},0,1],[{"3":{"-1":{"-1":0.5}}},0,0],[{"3":{"-1":{"-1":0.4}}},0,0]]'); 
 
 });
+
+
+it('intersect', function() {
+
+	var fsm1 = new FSM();
+	fsm1.setE( 0, 1, 0 );
+	fsm1.setE( 0, 2, 1, 1, 0.5 );
+	fsm1.setI( 0 );
+	fsm1.setF( 1 );
+	fsm1.setF( 2, 0.8 );
+
+	var fsm2 = new FSM();
+	fsm2.setE( 0, 1, 1, 1, 0.6 );
+	fsm2.setI( 0, 0.5 );
+	fsm2.setF( 1, 0.5 );
+
+	var fsm3 = new FSM();
+	fsm3.intersect( fsm1, fsm2 );
+
+	fsm3.connect();
+
+	assert.equal(JSON.stringify(fsm3.Q), '[[{"1":{"1":{"1":0.3}}},0,0.5,"0,0"],[{},0.4,0,"2,1"]]'); 
+
+});
