@@ -1,11 +1,11 @@
 'use strict'
 
-const WFSM = require('../src/index.js');
+const FSM = require('../src/index.js');
 var assert = require('assert');
 
 it('removeEpsilon', function() {
 
-	var wfsm = new WFSM();
+	var wfsm = new FSM();
 	wfsm.setE( 0, 1, 0, 0, 0.25 );
 	wfsm.setE( 0, 1, wfsm.EPS, wfsm.EPS, 0.5 );
 	wfsm.setE( 1, 1, wfsm.EPS, wfsm.EPS, 0.2 );
@@ -22,14 +22,14 @@ it('removeEpsilon', function() {
 
 it('union', function() {
 
-	var fsm1 = new WFSM();
+	var fsm1 = new FSM();
 	fsm1.setE( 0, 1, 0 );
 	fsm1.setE( 0, 2, 1 );
 	fsm1.setI( 0, 0.4 );
 	fsm1.setF( 1 );
 	fsm1.setF( 2 );
 
-	var fsm2 = new WFSM();
+	var fsm2 = new FSM();
 	fsm2.setE( 0, 1, 2 );
 	fsm2.setI( 0, 0.6 );
 	fsm2.setF( 1 );
@@ -43,14 +43,14 @@ it('union', function() {
 
 it('concat', function() {
 
-	var fsm1 = new WFSM();
+	var fsm1 = new FSM();
 	fsm1.setE( 0, 1, 0 );
 	fsm1.setE( 0, 2, 1 );
 	fsm1.setI( 0 );
 	fsm1.setF( 1 );
 	fsm1.setF( 2, 0.8 );
 
-	var fsm2 = new WFSM();
+	var fsm2 = new FSM();
 	fsm2.setE( 0, 1, 2 );
 	fsm2.setI( 0, 0.5 );
 	fsm2.setF( 1 );
