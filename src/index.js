@@ -1122,6 +1122,8 @@ module.exports = function WFSM() {
 			}
 		}
 
+		// output operations  --------------------------------------------------------------------
+
 		wfsm.toDot = function()
 		{
 			var code = "digraph {\n" ;	
