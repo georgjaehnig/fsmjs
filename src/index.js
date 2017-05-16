@@ -1122,7 +1122,7 @@ module.exports = function WFSM() {
 			}
 		}
 
-		wfsm.print = function()
+		wfsm.toDot = function()
 		{
 			var code = "digraph {\n" ;	
 			for ( var p in Q ) {
@@ -1163,7 +1163,12 @@ module.exports = function WFSM() {
 			code += "rankdir=LR\n" ;	
 			code += "}" ;	
 
-			console.log(code);	
+			return code;
+		}
+
+		wfsm.print = function() {
+			var code = wfsm.toDot();
+			console.log(code);
 		}
 
 	return wfsm;
