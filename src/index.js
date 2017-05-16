@@ -1166,11 +1166,6 @@ module.exports = function WFSM() {
 			console.log(code);	
 		}
 
-
-	wfsm.one = function () {
-		console.log('one');
-	};
-
 	return wfsm;
 }
 
