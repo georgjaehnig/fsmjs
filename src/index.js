@@ -54,17 +54,15 @@ module.exports = function wfsm () {
 	};
 
 
+	wfsm.EPS = -1;
+	wfsm.EPS1 = -2;
+	wfsm.EPS2 = -3;
+
 	wfsm.symbols = ['a', 'b', 'c', 'd', 'e'];
 
-	const EPS = -1;
-	const EPS1 = -2;
-	const EPS2 = -3;
-
-  var symbols = [];	
-	
-	symbols[EPS] = '<eps>';
-	symbols[EPS1] = '<eps1>';
-	symbols[EPS2] = '<eps2>';
+	wfsm.symbols[wfsm.EPS] = '<eps>';
+	wfsm.symbols[wfsm.EPS1] = '<eps1>';
+	wfsm.symbols[wfsm.EPS2] = '<eps2>';
 
 
 	/*
@@ -483,7 +481,7 @@ module.exports = function wfsm () {
 			wfsm.setQ( q0 );
 			for ( var q in Q ) {
 				if (! wfsm.isI( q ) ) continue;
-				wfsm.setE( q0, q, EPS, EPS, wfsm.getI( q ) );
+				wfsm.setE( q0, q, wfsm.EPS, wfsm.EPS, wfsm.getI( q ) );
 				wfsm.unsetI( q );
 			}
 			wfsm.setI( q0 );
@@ -508,7 +506,7 @@ module.exports = function wfsm () {
 				wfsm.transposeE( q, q0 + 1 );
 				// connect q0 with fsm2 initial states
 				if (! wfsm.isI( q ) ) continue;
-				wfsm.setE( q0, q, EPS, EPS, wfsm.getI( q ) );
+				wfsm.setE( q0, q, wfsm.EPS, wfsm.EPS, wfsm.getI( q ) );
 				wfsm.unsetI( q );
 			}
 			wfsm.isFSA = wfsm.isFSA && fsm2.isFSA;
@@ -538,7 +536,7 @@ module.exports = function wfsm () {
 				if (! wfsm.isF( p ) ) continue;
 				for ( var q in fsm2I ) {
 					wfsm.setE( 
-						p, q, EPS, EPS, 
+						p, q, wfsm.EPS, wfsm.EPS, 
 						sr.aProduct(
 							wfsm.getF( p ),
 							fsm2I[q]
@@ -583,31 +581,31 @@ module.exports = function wfsm () {
 
 		wfsm.compose = function( fsm1, fsm2 )
 		{
-			fsm1.renameE( EPS, EPS1 );
+			fsm1.renameE( wfsm.EPS, wfsm.EPS1 );
 			for (var  q in fsm1.Q ) { 
-				fsm1.setE( q, q, EPS2, EPS2 );
+				fsm1.setE( q, q, wfsm.EPS2, wfsm.EPS2 );
 			}
 			fsm1.print();	
 
-			fsm2.renameE( EPS, EPS2 );
+			fsm2.renameE( wfsm.EPS, wfsm.EPS2 );
 			for ( q in fsm2.Q ) {
-				fsm2.setE( q, q, EPS1, EPS1 );
+				fsm2.setE( q, q, wfsm.EPS1, wfsm.EPS1 );
 			}
 			fsm2.print();	
 
 			var fsmEpsFilter = new FSM(); 
-			for ( var ab in symbols ) {
+			for ( var ab in wfsm.symbols ) {
 				if ( ab < 0 ) continue;
 				fsmEpsFilter.setE( 0, 0, ab );
 				fsmEpsFilter.setE( 1, 0, ab );
 				fsmEpsFilter.setE( 2, 0, ab );
 			}
 
-			fsmEpsFilter.setE( 0, 1, EPS1, EPS1 );
-			fsmEpsFilter.setE( 0, 2, EPS2, EPS2 );
-			fsmEpsFilter.setE( 0, 0, EPS1, EPS2 );
-			fsmEpsFilter.setE( 1, 1, EPS1, EPS1 );
-			fsmEpsFilter.setE( 2, 2, EPS2, EPS2 );
+			fsmEpsFilter.setE( 0, 1, wfsm.EPS1, wfsm.EPS1 );
+			fsmEpsFilter.setE( 0, 2, wfsm.EPS2, wfsm.EPS2 );
+			fsmEpsFilter.setE( 0, 0, wfsm.EPS1, wfsm.EPS2 );
+			fsmEpsFilter.setE( 1, 1, wfsm.EPS1, wfsm.EPS1 );
+			fsmEpsFilter.setE( 2, 2, wfsm.EPS2, wfsm.EPS2 );
 
 			fsmEpsFilter.setI( 0 );
 			fsmEpsFilter.setF( 0 );
@@ -626,8 +624,8 @@ module.exports = function wfsm () {
 			//wfsm.print();
 			wfsm.connect();
 			wfsm.trim();
-			wfsm.renameE( EPS1, EPS );
-			wfsm.renameE( EPS2, EPS );
+			wfsm.renameE( wfsm.EPS1, wfsm.EPS );
+			wfsm.renameE( wfsm.EPS2, wfsm.EPS );
 		}
 
 		wfsm.composeDo = function( fsm1, fsm2 )
@@ -641,7 +639,7 @@ module.exports = function wfsm () {
 					for ( var q1 in fsm1.Q[p1][E] ) {
 						for ( var a1 in fsm1.Q[p1][E][q1] ) {
 							for ( var b1 in fsm1.Q[p1][E][q1][a1] ) {
-								if ( b1 != EPS ) continue;
+								if ( b1 != wfsm.EPS ) continue;
 								var q = wfsm.pairQ( q1, p2, fsm2.Q.length );
 								wfsm.setE( 
 									p, q, a1, b1,
@@ -651,7 +649,7 @@ module.exports = function wfsm () {
 						}
 					}
 					for ( var q2 in fsm2.Q[p2][E] ) {
-						var a2 = EPS;
+						var a2 = wfsm.EPS;
 						for ( var b2 in fsm2.Q[p2][E][q2][a2] ) {
 							var q = wfsm.pairQ( p1, q2, fsm2.Q.length );
 							wfsm.setE( 
@@ -691,7 +689,7 @@ module.exports = function wfsm () {
 				for ( var q in Q ) {
 					if (! wfsm.isI( q ) ) continue;
 					wfsm.setE( 
-						p, q, EPS, EPS, 
+						p, q, wfsm.EPS, wfsm.EPS, 
 						sr.aProduct(
 							wfsm.getF( p ),
 							wfsm.getI( q )
@@ -805,7 +803,7 @@ module.exports = function wfsm () {
 
 		wfsm.removeEpsilon = function()
 		{
-			var epsClosure = wfsm.allPairsDistance( [EPS] );
+			var epsClosure = wfsm.allPairsDistance( [wfsm.EPS] );
 			//alert( dump( epsClosure ) );
 			for ( var p in Q ) { 
 				for ( var q in epsClosure[p] ) {
@@ -822,9 +820,9 @@ module.exports = function wfsm () {
 					);
 					for ( var r in Q[q][E] ) {
 						for ( var a in Q[q][E][r] ) {
-							if ( a == EPS ) continue;
+							if ( a == wfsm.EPS ) continue;
 							for ( var b in Q[q][E][r][a] ) {
-								if ( b == EPS ) continue;
+								if ( b == wfsm.EPS ) continue;
 								// remember old weight and delete it
 								// so it won't get added to new one
 								var w = wfsm.getE( q, r, a, b );
@@ -848,7 +846,7 @@ module.exports = function wfsm () {
 							}
 						}
 					}
-					wfsm.unsetE( p, q, EPS, EPS );
+					wfsm.unsetE( p, q, wfsm.EPS, wfsm.EPS );
 				}
 			}
 		}
@@ -910,7 +908,7 @@ module.exports = function wfsm () {
 					}
 				}
 				fsmD.ensureQ( pD );
-				for ( var a in symbols ) {
+				for ( var a in wfsm.symbols ) {
 					if ( qDS[a] == undefined ) continue;
 
 					var qD = deepIndexOf( queue, qDS[a] );
@@ -1137,8 +1135,8 @@ module.exports = function wfsm () {
 								" -> " + 
 								q + 
 								" [ label=\"" + 
-								symbols[a] + 
-								( a != b ?  ":" + symbols[b] : "" ) +
+								wfsm.symbols[a] + 
+								( a != b ?  ":" + wfsm.symbols[b] : "" ) +
 								( wfsm.getE( p, q, a, b ) != sr.a1 ? "/" + wfsm.getE( p, q, a, b ) : "" ) + 
 								"\" ] \n" ;
 						}
