@@ -3,6 +3,8 @@
 const FSM = require('../src/index.js');
 var assert = require('assert');
 
+var fs = require('fs');
+
 it('removeEpsilon', function() {
 
 	var wfsm = new FSM();
@@ -15,7 +17,12 @@ it('removeEpsilon', function() {
 	wfsm.setF( 1, 0.3 );
 	wfsm.setF( 0, 0.25 );
 
+	fs.writeFile("removeEpsilon1.dot", wfsm.toDot());
+
 	wfsm.removeEpsilon();
+
+	fs.writeFile("removeEpsilon2.dot", wfsm.toDot());
+
 	assert.equal(JSON.stringify(wfsm.Q), '[[{"0":{"1":{"1":0.3125}},"1":{"0":{"0":0.25},"-1":{}}},0.4375,0],[{"0":{"1":{"1":0.625}},"1":{"-1":{}}},0.375,1]]');
 });
 
