@@ -8,10 +8,10 @@ var fs = require('fs');
 it('removeEpsilon', function() {
 
 	var wfsm = new WFSM();
-	wfsm.setE( 0, 1, 0, 0, 0.25 );
+	wfsm.setE( 0, 1, 'a', 'a', 0.25 );
 	wfsm.setE( 0, 1, wfsm.EPS, wfsm.EPS, 0.5 );
 	wfsm.setE( 1, 1, wfsm.EPS, wfsm.EPS, 0.2 );
-	wfsm.setE( 1, 0, 1, 1, 0.5 );
+	wfsm.setE( 1, 0, 'b', 'b', 0.5 );
 
 	wfsm.setI( 1, 1 );
 	wfsm.setF( 1, 0.3 );
