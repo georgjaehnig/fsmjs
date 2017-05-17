@@ -761,9 +761,9 @@ module.exports = function WFSM() {
 				for ( var j in Q ) {
 					d[i][j] = sr.a0; 
 					for ( var a in Q[i][E][j] ) {
-						if ( ( symbols != undefined ) && ( symbols.indexOf( parseInt( a ) ) == -1  ) ) continue;
+						if ( ( symbols != undefined ) && ( !symbols.has( a ) ) ) continue;
 						for ( var b in Q[i][E][j][a] ) {
-							if ( ( symbols != undefined ) && ( symbols.indexOf( parseInt( b ) ) == -1  ) ) continue;
+							if ( ( symbols != undefined ) && ( !symbols.has( b ) ) ) continue;
 							d[i][j] = sr.aSum(
 								d[i][j],
 								wfsm.getE( i, j, a, b )
@@ -809,7 +809,7 @@ module.exports = function WFSM() {
 
 		wfsm.removeEpsilon = function()
 		{
-			var epsClosure = wfsm.allPairsDistance( [wfsm.EPS] );
+			var epsClosure = wfsm.allPairsDistance( new Set(wfsm.EPS) );
 			//alert( dump( epsClosure ) );
 			for ( var p in Q ) { 
 				for ( var q in epsClosure[p] ) {
