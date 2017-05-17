@@ -53,7 +53,7 @@ module.exports = function WFSM() {
 		}
 	};
 
-
+	/*
 	wfsm.EPS = -1;
 	wfsm.EPS1 = -2;
 	wfsm.EPS2 = -3;
@@ -63,7 +63,13 @@ module.exports = function WFSM() {
 	wfsm.symbols[wfsm.EPS] = 'ε';
 	wfsm.symbols[wfsm.EPS1] = 'ε₁';
 	wfsm.symbols[wfsm.EPS2] = 'ε₂';
+	*/
 
+	wfsm.EPS = 'ε';
+	wfsm.EPS1 = 'ε₁';
+	wfsm.EPS2 = 'ε₂';
+
+	wfsm.symbols = new Set(wfsm.EPS, wfsm.EPS1, wfsm.EPS2, 'a', 'b', 'c', 'd', 'e');
 
 	/*
 	 * variable names:
@@ -1137,8 +1143,8 @@ module.exports = function WFSM() {
 								" -> " + 
 								q + 
 								" [ label=\"" + 
-								wfsm.symbols[a] + 
-								( a != b ?  ":" + wfsm.symbols[b] : "" ) +
+								a + 
+								( a != b ?  ":" + b : "" ) +
 								( wfsm.getE( p, q, a, b ) != sr.a1 ? "/" + wfsm.getE( p, q, a, b ) : "" ) + 
 								"\" ] \n" ;
 						}
