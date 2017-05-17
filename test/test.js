@@ -26,19 +26,17 @@ it('removeEpsilon', function() {
 	assert.equal(JSON.stringify(wfsm.Q), '[[{"0":{"b":{"b":0.3125}},"1":{"a":{"a":0.25},"ε":{}}},0.4375,0],[{"0":{"b":{"b":0.625}},"1":{"ε":{}}},0.375,1]]');
 });
 
-/*
-
 it('union', function() {
 
 	var wfsm1 = new WFSM();
-	wfsm1.setE( 0, 1, 0 );
-	wfsm1.setE( 0, 2, 1 );
+	wfsm1.setE( 0, 1, 'a' );
+	wfsm1.setE( 0, 2, 'b' );
 	wfsm1.setI( 0, 0.4 );
 	wfsm1.setF( 1 );
 	wfsm1.setF( 2 );
 
 	var wfsm2 = new WFSM();
-	wfsm2.setE( 0, 1, 2 );
+	wfsm2.setE( 0, 1, 'c' );
 	wfsm2.setI( 0, 0.6 );
 	wfsm2.setF( 1 );
 
@@ -49,10 +47,11 @@ it('union', function() {
 
 	fs.writeFile("union-3-both.dot", wfsm1.toDot(), function(err) {} );
 
-	assert.equal(JSON.stringify(wfsm1.Q), '[[{"1":{"0":{"0":1}},"2":{"1":{"1":1}}},0,0],[{},1,0],[{},1,0],[{"0":{"-1":{"-1":0.4}},"4":{"-1":{"-1":0.6}}},0,1]]'); 
+	assert.equal(JSON.stringify(wfsm1.Q), '[[{"1":{"a":{"a":1}},"2":{"b":{"b":1}}},0,0],[{},1,0],[{},1,0],[{"0":{"ε":{"ε":0.4}},"4":{"ε":{"ε":0.6}}},0,1]]'); 
 
 });
 
+/*
 
 it('concat', function() {
 
