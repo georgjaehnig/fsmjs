@@ -810,7 +810,6 @@ module.exports = function WFSM() {
 		wfsm.removeEpsilon = function()
 		{
 			var epsClosure = wfsm.allPairsDistance( new Set(wfsm.EPS) );
-			//alert( dump( epsClosure ) );
 			for ( var p in Q ) { 
 				for ( var q in epsClosure[p] ) {
 					if ( epsClosure[p][q] == sr.a0 ) continue;
