@@ -26,6 +26,7 @@ it('removeEpsilon', function() {
 	assert.equal(JSON.stringify(wfsm.Q), '[[{"0":{"1":{"1":0.3125}},"1":{"0":{"0":0.25},"-1":{}}},0.4375,0],[{"0":{"1":{"1":0.625}},"1":{"-1":{}}},0.375,1]]');
 });
 
+/*
 
 it('union', function() {
 
@@ -211,3 +212,5 @@ it('minimize', function() {
 	assert.equal(JSON.stringify(wfsm.Q), '[[{"1":{"0":{"0":2}}},0,1],[{"2":{"1":{"1":2}}},0,0],[{},1,0],null,null]'); 
 
 });
+
+*/
