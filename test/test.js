@@ -23,7 +23,7 @@ it('removeEpsilon', function() {
 
 	fs.writeFile("removeEpsilon-2-after.dot", wfsm.toDot(), function(err) {} );
 
-	assert.equal(JSON.stringify(wfsm.Q), '[[{"0":{"1":{"1":0.3125}},"1":{"0":{"0":0.25},"-1":{}}},0.4375,0],[{"0":{"1":{"1":0.625}},"1":{"-1":{}}},0.375,1]]');
+	assert.equal(JSON.stringify(wfsm.Q), '[[{"0":{"b":{"b":0.3125}},"1":{"a":{"a":0.25},"ε":{}}},0.4375,0],[{"0":{"b":{"b":0.625}},"1":{"ε":{}}},0.375,1]]');
 });
 
 /*
