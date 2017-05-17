@@ -104,18 +104,16 @@ it('intersect', function() {
 
 });
 
-/*
-
 it('closureTropical', function() {
 
 	var wfsm = new WFSM();
 	wfsm.setSR( wfsm.semirings.tropical );
 
 	wfsm.setI( 3 );
-	wfsm.setE( 3, 0, 0 );
-	wfsm.setE( 3, 1, 2 );
-	wfsm.setE( 1, 2, 1 );
-	wfsm.setE( 2, 1, 2, 2, 1 );
+	wfsm.setE( 3, 0, 'a' );
+	wfsm.setE( 3, 1, 'c' );
+	wfsm.setE( 1, 2, 'b' );
+	wfsm.setE( 2, 1, 'c', 'c', 1 );
 
 	wfsm.setI( 3 );
 	wfsm.setF( 0, 2 );
@@ -125,10 +123,11 @@ it('closureTropical', function() {
 	wfsm.starClosure();
 	fs.writeFile("closureTropical-2-after.dot", wfsm.toDot(), function(err) {} );
 
-	assert.equal(JSON.stringify(wfsm.Q), '[[{"3":{"-1":{"-1":2}}},2,"+inf"],[{"2":{"1":{"1":0}}},"+inf","+inf"],[{"1":{"2":{"2":1}},"3":{"-1":{"-1":1}}},1,"+inf"],[{"0":{"0":{"0":0}},"1":{"2":{"2":0}}},"+inf","+inf"],[{"3":{"-1":{"-1":0}}},0,0]]'); 
+	assert.equal(JSON.stringify(wfsm.Q), '[[{"3":{"ε":{"ε":2}}},2,"+inf"],[{"2":{"b":{"b":0}}},"+inf","+inf"],[{"1":{"c":{"c":1}},"3":{"ε":{"ε":1}}},1,"+inf"],[{"0":{"a":{"a":0}},"1":{"c":{"c":0}}},"+inf","+inf"],[{"3":{"ε":{"ε":0}}},0,0]]'); 
 
 });
 
+/*
 
 it('pushWeights', function() {
 
