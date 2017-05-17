@@ -1172,6 +1172,11 @@ module.exports = function WFSM() {
 			var code = wfsm.toDot();
 			console.log(code);
 		}
+	
+		wfsm.print = function() {
+			var code = wfsm.toDot();
+			console.log(code);
+		}
 
 	return wfsm;
 }
