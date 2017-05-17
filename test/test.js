@@ -51,19 +51,18 @@ it('union', function() {
 
 });
 
-/*
 
 it('concat', function() {
 
 	var wfsm1 = new WFSM();
-	wfsm1.setE( 0, 1, 0 );
-	wfsm1.setE( 0, 2, 1 );
+	wfsm1.setE( 0, 1, 'a' );
+	wfsm1.setE( 0, 2, 'b' );
 	wfsm1.setI( 0 );
 	wfsm1.setF( 1 );
 	wfsm1.setF( 2, 0.8 );
 
 	var wfsm2 = new WFSM();
-	wfsm2.setE( 0, 1, 2 );
+	wfsm2.setE( 0, 1, 'c' );
 	wfsm2.setI( 0, 0.5 );
 	wfsm2.setF( 1 );
 
@@ -74,10 +73,11 @@ it('concat', function() {
 
 	fs.writeFile("concat-3-both.dot", wfsm1.toDot(), function(err) {});
 
-	assert.equal(JSON.stringify(wfsm1.Q), '[[{"1":{"0":{"0":1}},"2":{"1":{"1":1}}},0,1],[{"3":{"-1":{"-1":0.5}}},0,0],[{"3":{"-1":{"-1":0.4}}},0,0]]'); 
+	assert.equal(JSON.stringify(wfsm1.Q), '[[{"1":{"a":{"a":1}},"2":{"b":{"b":1}}},0,1],[{"3":{"ε":{"ε":0.5}}},0,0],[{"3":{"ε":{"ε":0.4}}},0,0]]'); 
 
 });
 
+/*
 
 it('intersect', function() {
 
