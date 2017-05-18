@@ -1130,6 +1130,26 @@ module.exports = function WFSM() {
 			}
 		}
 
+		// word operations  --------------------------------------------------------------------
+
+		wfsm.addWord = function(word) {
+
+			var lastState = Q.length;
+
+			var p = lastState + 1;
+			wfsm.setE( 0, p, wfsm.EPS );
+
+			for (var i in word) {
+				i = parseInt(i);
+				wfsm.symbols.add(word[i]);
+				wfsm.setE( p, p+1, word[i] );
+				p = p + 1;
+			}
+			wfsm.setF( p );
+
+
+		}
+
 		// output operations  --------------------------------------------------------------------
 
 		wfsm.toDot = function()
