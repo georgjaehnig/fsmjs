@@ -603,7 +603,7 @@ module.exports = function WFSM() {
 			fsm2.print();	
 
 			var fsmEpsFilter = new FSM(); 
-			for ( var ab in wfsm.symbols ) {
+			for ( let ab of wfsm.symbols ) {
 				if ( ab < 0 ) continue;
 				fsmEpsFilter.setE( 0, 0, ab );
 				fsmEpsFilter.setE( 1, 0, ab );
