@@ -187,15 +187,13 @@ it('determinize', function() {
 
 });
 
-/*
-
 it('minimize', function() {
 
 	var wfsm = new WFSM();
-	wfsm.setE( 0, 1, 0, 0 );
-	wfsm.setE( 1, 2, 1, 1 );
-	wfsm.setE( 0, 3, 0, 0 );
-	wfsm.setE( 3, 4, 1, 1 );
+	wfsm.setE( 0, 1, 'a', 'a' );
+	wfsm.setE( 1, 2, 'b', 'b' );
+	wfsm.setE( 0, 3, 'a', 'a' );
+	wfsm.setE( 3, 4, 'b', 'b' );
 	wfsm.setI( 0 );
 	wfsm.setF( 2 );
 	wfsm.setF( 4 );
@@ -204,8 +202,6 @@ it('minimize', function() {
 	wfsm.minimize();
 	fs.writeFile("minimize-2-after.dot", wfsm.toDot(), function(err) {} );
 
-	assert.equal(JSON.stringify(wfsm.Q), '[[{"1":{"0":{"0":2}}},0,1],[{"2":{"1":{"1":2}}},0,0],[{},1,0],null,null]'); 
+	assert.equal(JSON.stringify(wfsm.Q), '[[{"1":{"a":{"a":2}}},0,1],[{"2":{"b":{"b":2}}},0,0],[{},1,0],null,null]'); 
 
 });
-
-*/
