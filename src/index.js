@@ -69,7 +69,7 @@ module.exports = function WFSM() {
 	wfsm.EPS1 = 'ε₁';
 	wfsm.EPS2 = 'ε₂';
 
-	wfsm.symbols = new Set(wfsm.EPS, wfsm.EPS1, wfsm.EPS2, 'a', 'b', 'c', 'd', 'e');
+	wfsm.symbols = new Set(['a', 'b', 'c', 'd', 'e', wfsm.EPS, wfsm.EPS1, wfsm.EPS2]);
 
 	/*
 	 * variable names:
