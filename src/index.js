@@ -325,6 +325,9 @@ module.exports = function WFSM() {
 		// returns void
 		wfsm.setE = function( p, q, a, b, w ) 
 		{
+			p = parseInt(p);
+			q = parseInt(q);
+
 			if ( w == sr.a0 ) return; // 0 weight = no transition
 
 			if ( w == undefined ) w = sr.a1;	// weight trivially
