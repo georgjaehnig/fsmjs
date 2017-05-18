@@ -183,7 +183,7 @@ it('determinize', function() {
 	wfsm.determinize();
 	fs.writeFile("determinize-2-after.dot", wfsm.toDot(), function(err) {} );
 
-	assert.equal(JSON.stringify(wfsm.Q), '[[{"1":{"0":{"0":1}}},0,1],[{"1":{"1":{"1":0.4}},"2":{"2":{"2":0.18},"3":{"3":0.42}}},0,0,"1,0.3 / 2,0.7"],[{},1,0,"3,1"],null]'); 
+	assert.equal(JSON.stringify(wfsm.Q), '[[{"1":{"a":{"a":1}}},0,1],[{"1":{"b":{"b":0.4}},"2":{"c":{"c":0.18},"d":{"d":0.42}}},0,0,"1,0.3 / 2,0.7"],[{},1,0,"3,1"],null]'); 
 
 });
 
