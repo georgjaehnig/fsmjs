@@ -913,7 +913,7 @@ module.exports = function WFSM() {
 					}
 				}
 				fsmD.ensureQ( pD );
-				for ( var a in wfsm.symbols ) {
+				for ( let a of wfsm.symbols ) {
 					if ( qDS[a] == undefined ) continue;
 
 					var qD = deepIndexOf( queue, qDS[a] );
